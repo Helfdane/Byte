@@ -47,7 +47,7 @@ public class Task2 implements Runnable {
 	    		
 	    		 ++k;
 	    	   }
-	    		Thread.sleep(250);
+	    		//Thread.sleep(250);
 	    		}catch (Exception ex){ex.printStackTrace(new PrintStream(System.out));}
 	        Byte.game.anotherFlag = false;
 	    	Byte.game.displayArray(Byte.game.b);

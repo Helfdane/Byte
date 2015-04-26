@@ -20,14 +20,14 @@ public class Byte extends  JFrame implements KeyListener{
 	int V = 14;
 	int SH = 7;
 	boolean flag = true;
-	volatile boolean anotherFlag = false;
+	public static volatile boolean anotherFlag = false;
 	int PlayerScore;
 	int figureNumber;
 	int figurePosition;
 	long defaultSpeed = 300;
 	ArrayList<Integer> iCoor ;
 	ArrayList<Integer> jCoor ;
-   	String[][] b;
+   	 String[][] b;
 	JLabel label;
 	static Byte game = new Byte("Tetris");
 	
@@ -36,6 +36,7 @@ public class Byte extends  JFrame implements KeyListener{
 	        JPanel p = new JPanel();
 	        label = new JLabel("Game uber alles!");
 	        p.add(label);
+	        add(p);
 	        add(p);
 	        addKeyListener(this);
 	        setSize(600, 600);
@@ -308,7 +309,7 @@ public class Byte extends  JFrame implements KeyListener{
     public  void placeFigure(String[][] b){
 
     	game.figureNumber = (int)(Math.random()*6 +1);
-    	Figure chair = new Figure(game.figureNumber);                         // фигурку менять тут
+    	Figure chair = new Figure(5);                         // фигурку менять тут
         for(int i = 0; i < 3; i++){
         	for(int j = 0; j < 3; j++){
         		b[i][j+2] = chair.a[i][j];
@@ -539,15 +540,23 @@ public class Byte extends  JFrame implements KeyListener{
 		while(game.flag){
 		game.preCheck();
 		
+		 if(game.anotherFlag == false){
+				Thread t1 = new Thread(new Task1());
+				t1.start();
+				t1.join();
+				game.doubleCheck(); // а не вынести ли в поток?	   
+		 }
+				
+		
 		if(game.anotherFlag == true){
+			synchronized(game.b){
 			Thread t2 = new Thread(new Task2());
 			t2.start();
 			t2.join();
+			}
+			
 		}
-	    Thread t1 = new Thread(new Task1());
-		t1.start();
-		t1.join();
-		game.doubleCheck(); // а не вынести ли в поток?
+	  
 		
 		}
 		System.out.println("              " + game.PlayerScore);
